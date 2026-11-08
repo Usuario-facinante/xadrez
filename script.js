@@ -1,6 +1,8 @@
 const xadrez = document.querySelector("#tabuleiro");
 let posições_peca = []
-
+let peca_clicada = null
+const pecas_negras = ["♟", "♜", "♝", "♛", "♚", "♞"];
+const pecas_brancas = ["♙", "♖", "♘", "♗", "♕", "♔"];
 for (let linha = 0; linha < 8; linha++) {
     posições_peca[linha] = []
     
@@ -50,27 +52,47 @@ function tabuleiro() {
         else if (peca === "♙" || peca === "♔" || peca === "♖" || peca === "♘" || peca === "♗" || peca === "♕") {
                 casa.classList.add("peça-branca")
             }
+            
             casa.textContent = posições_peca[linha][coluna]
             xadrez.appendChild(casa);
             casa.onclick = function() {
-                movimentos(linha, coluna)
+                if (posições_peca[linha][coluna] === "◯") {
+                    movimentos(linha, coluna, )
+                }
+                else {
+                    bolinha(linha, coluna)
+                }
             }
         }
     }
 }
 tabuleiro()
-    function movimentos(linha, coluna) {
+    function bolinha(linha, coluna) {
+        for (let linhaL = 0; linhaL < 8; linhaL++) {
+            for (let colunaL = 0; colunaL < 8; colunaL++) {
+                if (posições_peca[linhaL][colunaL] != "♙" && posições_peca[linhaL][colunaL] != "♔" && posições_peca[linhaL][colunaL] != "♖" && posições_peca[linhaL][colunaL] != "♘" && posições_peca[linhaL][colunaL] != "♗" && posições_peca[linhaL][colunaL] != "♕" && posições_peca[linhaL][colunaL] != "♟" && posições_peca[linhaL][colunaL] != "♜" && posições_peca[linhaL][colunaL] !=  "♝" && posições_peca[linhaL][colunaL] != "♚" && posições_peca[linhaL][colunaL] != "♛" && posições_peca[linhaL][colunaL] != "♞") {
+                    posições_peca[linhaL][colunaL] = null
+                }
+            }
+        }
         if (posições_peca[linha][coluna] != null) {
             switch (posições_peca[linha][coluna]) {
                 case "♟":
-                    if (linha -1 > 0 && posições_peca[linha-1][coluna] === null) {
-                        posições_peca[linha-1][coluna] = "●"
-                        if (linha -2 > 0 && posições_peca[linha-2][coluna] === null) {
-                            posições_peca[linha-2][coluna] = "●"
+                    if (linha > 0 && posições_peca[linha-1][coluna] === null) {
+                        posições_peca[linha-1][coluna] = "◯"
+                        peca_clicada = "♟"
+                        posicao_antiga = [linha, coluna]
+                        if (linha -2 > 0 && posições_peca[linha-2][coluna] === null && linha == 6) {
+                            posições_peca[linha-2][coluna] = "◯"
                         }
-                        tabuleiro()
                     }
-                    break
+                    if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && posições_peca[linha-1][coluna-1] === "♙") {
+                        posições_peca[linha-1][coluna-1] = "◯"
+                    }
+                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && posições_peca[linha-1][coluna+1] === "♙") {
+                        posições_peca[linha-1][coluna+1] = "◯"
+                    }
+                    break;
                 case "♜":
                     break
                 case "♞":
@@ -83,6 +105,20 @@ tabuleiro()
                     break
 //branco
                 case "♙":
+                    if (linha > 0 && posições_peca[linha+1][coluna] === null) {
+                        posições_peca[linha+1][coluna] = "◯"
+                        peca_clicada = "♙"
+                        posicao_antiga = [linha, coluna]
+                        if (linha > 0 && posições_peca[linha+2][coluna] === null && linha == 1) {
+                            posições_peca[linha+2][coluna] = "◯"
+                        }
+                   if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && posições_peca[linha-1][coluna-1] === "♟") {
+                        posições_peca[linha-1][coluna-1] = "◯"
+                    }
+                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && posições_peca[linha-1][coluna+1]) {
+                        posições_peca[linha-1][coluna+1] = "◯"
+                    }
+                    }
                     break
                 case "♔":
                     break
@@ -96,4 +132,12 @@ tabuleiro()
                     break
             }
         }
+        tabuleiro()
     }
+function movimentos(linha, coluna) {
+    posições_peca[linha][coluna] = peca_clicada
+    posições_peca[posicao_antiga[0]][posicao_antiga[1]] = null
+    bolinha(linha, coluna)
+    tabuleiro()
+    posicao_antiga = [linha, coluna]
+}
