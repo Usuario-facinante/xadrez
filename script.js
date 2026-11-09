@@ -77,24 +77,40 @@ tabuleiro()
         }
         if (posições_peca[linha][coluna] != null) {
             switch (posições_peca[linha][coluna]) {
+//preto
                 case "♟":
                     if (linha > 0 && posições_peca[linha-1][coluna] === null) {
                         posições_peca[linha-1][coluna] = "◯"
                         peca_clicada = "♟"
-                        posicao_antiga = [linha, coluna]
                         if (linha -2 > 0 && posições_peca[linha-2][coluna] === null && linha == 6) {
                             posições_peca[linha-2][coluna] = "◯"
                         }
                     }
-                    if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && posições_peca[linha-1][coluna-1] === "♙") {
+                    if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_brancas.includes(posições_peca[linha+1][coluna+1]) && pecas_brancas.includes(posições_peca[linha+1][coluna-1])) {
+                        posições_peca[linha-1][coluna-1] = "◯"
+                        posições_peca[linha-1][coluna+1] = "◯"
+                    }
+                    if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_brancas.includes(posições_peca[linha-1][coluna-1])) {
                         posições_peca[linha-1][coluna-1] = "◯"
                     }
-                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && posições_peca[linha-1][coluna+1] === "♙") {
+                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_brancas.includes(posições_peca[linha-1][coluna+1])) {
                         posições_peca[linha-1][coluna+1] = "◯"
                     }
                     break;
                 case "♜":
-                    break
+                    peca_clicada = "♜"
+                    for (let colunax = 0; colunax < 8; colunax++) {
+                        if (linha < 8 && posições_peca[linha][colunax] === null){
+                            posições_peca[linha][colunax] = "◯"
+                        } 
+                    }
+                    for (let linhax = 0; linhax < 8; linhax++) {
+                        if (linhax < 8 && posições_peca[linhax][coluna] === null) {
+                            posições_peca[linhax][coluna] = "◯"
+                        }
+                    }
+
+                break
                 case "♞":
                     break
                 case "♝":
@@ -112,17 +128,37 @@ tabuleiro()
                         if (linha > 0 && posições_peca[linha+2][coluna] === null && linha == 1) {
                             posições_peca[linha+2][coluna] = "◯"
                         }
-                   if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && posições_peca[linha-1][coluna-1] === "♟") {
-                        posições_peca[linha-1][coluna-1] = "◯"
+                    if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_negras.includes(posições_peca[linha+1][coluna+1]) && pecas_negras.includes(posições_peca[linha+1][coluna-1])) {
+                        posições_peca[linha+2][coluna-1] = "◯"
+                        posições_peca[linha+1][coluna+1] = "◯"
                     }
-                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && posições_peca[linha-1][coluna+1]) {
-                        posições_peca[linha-1][coluna+1] = "◯"
+                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_negras.includes(posições_peca[linha+1][coluna+1])) {
+                        posições_peca[linha+1][coluna+1] = "◯"
+                    }
+                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_negras.includes(posições_peca[linha+1][coluna-1])) {
+                        posições_peca[linha+1][coluna-1] = "◯"
+                        pecas_negras.includes(posições_peca[linha+1][coluna-1])
                     }
                     }
                     break
                 case "♔":
                     break
                 case "♖":
+                    peca_clicada = "♖"
+                    for (let colunax = posições_peca[linha]; colunax < 8; colunax++) {
+                        if (linha < 8 && posições_peca[linha][colunax] === null){
+                            posições_peca[linha][colunax] = "◯"
+                        } 
+                    }
+                    for (let linhax = posições_peca[coluna]; linhax < 8; linhax++) {
+                        if (linhax < 8 && posições_peca[linhax][coluna] === null) {
+                                posições_peca[linhax][coluna] = "◯"
+                        }
+                        else {
+                            break
+                        }
+                
+                    }
                     break
                 case "♗":
                     break
@@ -132,6 +168,7 @@ tabuleiro()
                     break
             }
         }
+        posicao_antiga = [linha, coluna]
         tabuleiro()
     }
 function movimentos(linha, coluna) {
