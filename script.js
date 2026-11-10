@@ -100,9 +100,9 @@ tabuleiro()
                 case "♜":
                     peca_clicada = "♜"
                     for (let colunax = 0; colunax < 8; colunax++) {
-                        if (linha < 8 && posições_peca[linha][colunax] === null){
+                        if (linha < 8 && posições_peca[colunax] === null){
                             posições_peca[linha][colunax] = "◯"
-                        } 
+                        }
                     }
                     for (let linhax = 0; linhax < 8; linhax++) {
                         if (linhax < 8 && posições_peca[linhax][coluna] === null) {
@@ -142,22 +142,49 @@ tabuleiro()
                     }
                     break
                 case "♔":
+                    peca_clicada =  "♔"
+                    if (linha < 8) {
+                        if (posições_peca[linha+1][coluna] === null) {
+                            posições_peca[linha+1][coluna] = "◯"
+                        }
+                        if (coluna < 8 && posições_peca[linha+1][coluna+1] === null) {
+                            posições_peca[linha+1][coluna+1] = "◯"
+                        }
+                        if (coluna > 0 && posições_peca[linha+1][coluna-1] === null) {
+                            posições_peca[linha+1][coluna-1] = "◯"
+                        }
+                    }
+                    if (coluna > 0) {
+                        if (posições_peca[linha][coluna-1] === null) {
+                            posições_peca[linha][coluna-1] = "◯"
+                        }
+                        if (posições_peca[linha][coluna+1] ===  null) {
+                            posições_peca[linha][coluna+1] = "◯"
+                        }
+                    }
+                    if (linha > 0) {
+                        if (posições_peca[linha-1][coluna] === null) {
+                            posições_peca[linha-1][coluna] = "◯"
+                        }
+                        if (posições_peca[linha-1][coluna+1] === null) {
+                            posições_peca[linha-1][coluna+1] = "◯"
+                        }
+                        if (posições_peca[linha-1][coluna-1] === null) {
+                            posições_peca[linha-1][coluna-1] = "◯"
+                        }
+                    }
                     break
                 case "♖":
                     peca_clicada = "♖"
-                    for (let colunax = posições_peca[linha]; colunax < 8; colunax++) {
+                    for (let colunax = 0; colunax < 8; colunax++) {
                         if (linha < 8 && posições_peca[linha][colunax] === null){
                             posições_peca[linha][colunax] = "◯"
                         } 
                     }
-                    for (let linhax = posições_peca[coluna]; linhax < 8; linhax++) {
+                    for (let linhax = 0; linhax < 8; linhax++) {
                         if (linhax < 8 && posições_peca[linhax][coluna] === null) {
                                 posições_peca[linhax][coluna] = "◯"
                         }
-                        else {
-                            break
-                        }
-                
                     }
                     break
                 case "♗":
