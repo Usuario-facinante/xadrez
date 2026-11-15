@@ -1,8 +1,9 @@
-const xadrez = document.querySelector("#tabuleiro");
+const xadrez = document.querySelector("#tabuleiro")
 let posições_peca = []
 let peca_clicada = null
-const pecas_negras = ["♟", "♜", "♝", "♛", "♚", "♞"];
-const pecas_brancas = ["♙", "♖", "♘", "♗", "♕", "♔"];
+const pecas_negras = ["♟", "♜", "♝", "♛", "♚", "♞"]
+const pecas_brancas = ["♙", "♖", "♘", "♗", "♕", "♔"]
+let jogada = 1
 for (let linha = 0; linha < 8; linha++) {
     posições_peca[linha] = []
     
@@ -76,96 +77,111 @@ tabuleiro()
             }
         }
         if (posições_peca[linha][coluna] != null) {
-            switch (posições_peca[linha][coluna]) {
-//preto
-                case "♟":
-                    if (linha > 0 && posições_peca[linha-1][coluna] === null) {
-                        posições_peca[linha-1][coluna] = "◯"
-                        peca_clicada = "♟"
-                        if (linha -2 > 0 && posições_peca[linha-2][coluna] === null && linha == 6) {
-                            posições_peca[linha-2][coluna] = "◯"
+            if (jogada % 2 === 1) {
+                switch (posições_peca[linha][coluna]) {
+//preto 
+                    case "♟":
+                        if (linha > 0 && posições_peca[linha-1][coluna] === null) {
+                            posições_peca[linha-1][coluna] = "◯"
+                            peca_clicada = "♟"
+                            if (linha -2 > 0 && posições_peca[linha-2][coluna] === null && linha == 6) {
+                                posições_peca[linha-2][coluna] = "◯"
+                            }
                         }
-                    }
-                    if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_brancas.includes(posições_peca[linha+1][coluna+1]) && pecas_brancas.includes(posições_peca[linha+1][coluna-1])) {
-                        posições_peca[linha-1][coluna-1] = "◯"
-                        posições_peca[linha-1][coluna+1] = "◯"
-                    }
-                    if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_brancas.includes(posições_peca[linha-1][coluna-1])) {
-                        posições_peca[linha-1][coluna-1] = "◯"
-                    }
-                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_brancas.includes(posições_peca[linha-1][coluna+1])) {
-                        posições_peca[linha-1][coluna+1] = "◯"
-                    }
-                    break;
-                case "♜":
-                    peca_clicada = "♜"
-                    torre(linha, coluna)
-                break
-                case "♞":
-                    peca_clicada = "♞"
-                    cavalo(linha, coluna)
-                    break
-                case "♝":
-                    peca_clicada = "♝"
-                    bispo(linha, coluna)
-                    break
-                case "♛":
-                    break
-                case "♚":
-                    peca_clicada = "♚"
-                    rei(linha, coluna)
-                    break
-//branco
-                case "♙":
-                    if (linha > 0 && posições_peca[linha+1][coluna] === null) {
-                        posições_peca[linha+1][coluna] = "◯"
-                        peca_clicada = "♙"
-                        posicao_antiga = [linha, coluna]
-                        if (linha > 0 && posições_peca[linha+2][coluna] === null && linha == 1) {
-                            posições_peca[linha+2][coluna] = "◯"
+                        if (coluna + 1 < 8 && linha + 1 < 8 && coluna > 0 && pecas_brancas.includes(posições_peca[linha+1][coluna+1]) && pecas_brancas.includes(posições_peca[linha+1][coluna-1])) {
+                            posições_peca[linha-1][coluna-1] = "◯" // colocar classe capturavel
+                            posições_peca[linha-1][coluna+1] = "◯"
                         }
-                    if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_negras.includes(posições_peca[linha+1][coluna+1]) && pecas_negras.includes(posições_peca[linha+1][coluna-1])) {
-                        posições_peca[linha+2][coluna-1] = "◯"
-                        posições_peca[linha+1][coluna+1] = "◯"
-                    }
-                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_negras.includes(posições_peca[linha+1][coluna+1])) {
-                        posições_peca[linha+1][coluna+1] = "◯"
-                    }
-                    else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_negras.includes(posições_peca[linha+1][coluna-1])) {
-                        posições_peca[linha+1][coluna-1] = "◯"
-                        pecas_negras.includes(posições_peca[linha+1][coluna-1])
-                    }
-                    }
+                        if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_brancas.includes(posições_peca[linha-1][coluna-1])) {
+                            posições_peca[linha-1][coluna-1] = "◯" // colocar classe capturavel
+                        }
+                        else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_brancas.includes(posições_peca[linha-1][coluna+1])) {
+                            posições_peca[linha-1][coluna+1] = "◯" // colocar classe capturavel
+                        }
+                        break;
+                    case "♜":
+                        peca_clicada = "♜"
+                        torre(linha, coluna)
                     break
-                case "♔":
-                    peca_clicada =  "♔"
-                    rei(linha, coluna)
-                    break
-                case "♖":
-                    peca_clicada = "♖"
-                    torre(linha, coluna)
-                    break
-                case "♗":
-                    peca_clicada = "♗"
-                    bispo(linha, coluna)
-                    break
-                case "♘":
-                    peca_clicada = "♘"
-                    cavalo(linha, coluna)
-                break
-                case "♕":
-                    break
+                    case "♞":
+                        peca_clicada = "♞"
+                        cavalo(linha, coluna)
+                        break
+                    case "♝":
+                        peca_clicada = "♝"
+                        bispo(linha, coluna)
+                        break
+                    case "♛":
+                        peca_clicada = "♛"
+                        torre(linha, coluna)
+                        bispo(linha, coluna)
+                        break   
+                    case "♚":
+                        peca_clicada = "♚"
+                        rei(linha, coluna)
+                        break
+                }
             }
-        }
+            else {     
+                    switch (posições_peca[linha][coluna]) {
+                        case "♙":
+                            if (linha > 0 && posições_peca[linha+1][coluna] === null) {
+                                posições_peca[linha+1][coluna] = "◯"
+                                peca_clicada = "♙"
+                                posicao_antiga = [linha, coluna]
+                                if (linha > 0 && posições_peca[linha+2][coluna] === null) {
+                                    posições_peca[linha+2][coluna] = "◯"
+                                }
+                            else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_negras.includes(posições_peca[linha+1][coluna+1])) {
+                                posições_peca[linha+1][coluna+1] = "◯"// colocar classe capturavel
+                            }
+                            else if (linha > 0 && linha < 8 && coluna > 0 && coluna < 8 && pecas_negras.includes(posições_peca[linha+1][coluna-1])) {
+                                posições_peca[linha+1][coluna-1] = "◯"
+                                pecas_negras.includes(posições_peca[linha+1][coluna-1])// colocar classe capturavel
+                            }
+                            }
+                            break
+                        case "♔":
+                            peca_clicada =  "♔"
+                            rei(linha, coluna)
+                            break
+                        case "♖":
+                            peca_clicada = "♖"
+                            torre(linha, coluna)
+                            break
+                        case "♗":
+                            peca_clicada = "♗"
+                            bispo(linha, coluna)
+                            break
+                        case "♘":
+                            peca_clicada = "♘"
+                            cavalo(linha, coluna)
+                        break
+                        case "♕":
+                            peca_clicada = "♕"
+                            torre(linha, coluna)
+                            bispo(linha, coluna)
+                            break
+                        }
+            }
         posicao_antiga = [linha, coluna]
         tabuleiro()
-    }
+        console.log(jogada)
+    }}
+
 function movimentos(linha, coluna) {
     posições_peca[linha][coluna] = peca_clicada
     posições_peca[posicao_antiga[0]][posicao_antiga[1]] = null
     bolinha(linha, coluna)
+    jogada++
+    for (let linhaL = 0; linhaL < 8; linhaL++) {
+        for (let colunaL = 0; colunaL < 8; colunaL++) {
+            if (posições_peca[linhaL][colunaL] != "♙" && posições_peca[linhaL][colunaL] != "♔" && posições_peca[linhaL][colunaL] != "♖" && posições_peca[linhaL][colunaL] != "♘" && posições_peca[linhaL][colunaL] != "♗" && posições_peca[linhaL][colunaL] != "♕" && posições_peca[linhaL][colunaL] != "♟" && posições_peca[linhaL][colunaL] != "♜" && posições_peca[linhaL][colunaL] !=  "♝" && posições_peca[linhaL][colunaL] != "♚" && posições_peca[linhaL][colunaL] != "♛" && posições_peca[linhaL][colunaL] != "♞") {
+                posições_peca[linhaL][colunaL] = null
+            }
+        }
+    }
     tabuleiro()
-    posicao_antiga = [linha, coluna]
 }
 
 //funcionamento das pecas
@@ -206,51 +222,90 @@ function torre(linha, coluna) {
         if (linha < 8 && posições_peca[linha][colunax] === null){
             posições_peca[linha][colunax] = "◯"
         }
+        else {
+            break
+        }
     }
     for (let linhax = 0; linhax < 8; linhax++) {
         if (linhax < 8 && posições_peca[linhax][coluna] === null) {
             posições_peca[linhax][coluna] = "◯"
+        }
+        else {
+            break
         }
     }
 
 }
 function cavalo(linha, coluna) {
     if (linha-1 >= 0) {
-        if (coluna+2 <= 7) {
+        if (coluna+2 <= 7 && posições_peca[linha - 1][coluna + 2] === null) {
             posições_peca[linha-1][coluna+2] = "◯"
         }
-        if (coluna-2 >= 0) {
+        if (coluna-2 >= 0 && posições_peca[linha - 1][coluna - 2] === null) {
             posições_peca[linha-1][coluna-2] = "◯"
         }
     }
     if (linha-2 >= 0) {
-        if (coluna+1 <= 7) {
+        if (coluna+1 <= 7 && posições_peca[linha - 2][coluna + 1] === null) {
             posições_peca[linha-2][coluna+1] = "◯"
         }
-        if (coluna-1 >= 0) {
+        if (coluna-1 >= 0 && posições_peca[linha - 2][coluna - 1] === null) {
             posições_peca[linha-2][coluna-1] = "◯"
         }
     }
-    if (linha + 1 <= 7) {
+    if (linha + 1 <= 7 && posições_peca[linha + 1][coluna + 2 === null]) {
         if (coluna + 2 <= 7) {
             posições_peca[linha + 1][coluna + 2] = "◯"
         }
-        if (coluna - 2 >= 0) {
+        if (coluna - 2 >= 0 && posições_peca[linha + 1][coluna - 2] === null) {
             posições_peca[linha + 1][coluna - 2] = "◯"
         }
     }
     if (linha + 2 <= 7) {
-        if (coluna+1 <= 7) {
+        if (coluna+1 <= 7 && posições_peca[linha + 2][coluna + 1] === null) {
             posições_peca[linha+2][coluna+1] = "◯"
         }
-        if (coluna-1 >= 0) {
+        if (coluna-1 >= 0 && posições_peca[linha + 2][coluna - 1] === null) {
             posições_peca[linha+2][coluna-1] = "◯"
         }
     }
    
 }
 function bispo(linha, coluna) {
-    for (let diagonal = 1; linha + diagonal <= 7 && coluna + diagonal <= 7; diagonal++) {
-        posições_peca[linha + diagonal][coluna + diagonal] = "◯"
+    for (let diagonal = 1; diagonal < 8; diagonal++) {
+        if (linha + diagonal <= 7) {
+            if (coluna + diagonal <= 7 && posições_peca[linha + diagonal][coluna + diagonal] === null) {
+                posições_peca[linha + diagonal][coluna + diagonal] = "◯"
+        }
+    } 
+        else {
+            break
+        }
+    }
+        for (let diagonal = 1; diagonal < 8; diagonal++) {
+            if (coluna - diagonal >= 0 && posições_peca[linha + diagonal][coluna - diagonal] === null) {
+                posições_peca[linha + diagonal][coluna - diagonal] = "◯"
+            }
+            else {
+                break
+            }
+        }
+    for (let diagonal = 1; diagonal < 8; diagonal++) {
+        if (linha - diagonal >= 0) {
+            if (coluna - diagonal >= 0 && posições_peca[linha - diagonal][coluna - diagonal] === null) {
+                posições_peca[linha - diagonal][coluna - diagonal] = "◯"
+            }
+            else {
+                break
+            }
+        }
+    for (let diagonal = 1; diagonal < 8; diagonal++) {    
+        if (coluna + diagonal <= 7 && posições_peca[linha - diagonal][coluna + diagonal] === null) {
+                posições_peca[linha - diagonal][coluna + diagonal] = "◯" 
+            }
+        else {
+            break
+        }
+        }   
     }
 }
