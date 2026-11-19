@@ -40,3 +40,7 @@ body {
 p {
     text-align: center;
 }
+.casa.capturavel {
+    box-shadow: inset 0 0 0 5px rgba(255, 0, 0, 0.7);
+    cursor: pointer;
+}
