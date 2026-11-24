@@ -174,7 +174,7 @@ const casas_mexidas = new Set()
                                 if (linha +1<= 7 && coluna -1>= 0 && pecas_negras.includes(posições_peca[linha+1][coluna-1])) {
                                     xadrez.children[(linha+ 1) * 8 + coluna - 1].classList.add("capturavel")
                                 }
-                                // [NOVO] Se for possível capturar en passant, marca a casa de destino com "◯" (ver função enPassant).
+                                // Se for possível capturar en passant, marca a casa de destino com "◯" (ver função enPassant).
                                 enPassant(linha, coluna)
                                 break
                             case "♔":
@@ -344,7 +344,7 @@ const casas_mexidas = new Set()
     const torrePeca = cor === "branco" ? "♖" : "♜"
 
     if (posições_peca[linhaRoque][4] === reiPeca && !jaMexeu(linhaRoque, 4) && !xeque(cor)) {
-        // Roque pequeno (lado do rei)
+        // Roque pequeno 
         if (
             posições_peca[linhaRoque][7] === torrePeca &&
             !jaMexeu(linhaRoque, 7) &&
@@ -354,7 +354,7 @@ const casas_mexidas = new Set()
         ) {
             posições_peca[linhaRoque][6] = "O"
         }
-        // Roque grande (lado da dama)
+        // Roque grande 
         if (
             posições_peca[linhaRoque][0] === torrePeca &&
             !jaMexeu(linhaRoque, 0) &&
@@ -845,18 +845,18 @@ function encontrarRei(cor) {
     }
     return false
     }
-// [NOVO] ROQUE — diz se a peça que começa nessa casa já se mexeu (ou se a casa já foi usada em algum lance).
+//  diz que começa nessa casa já se mexeu (ou se a casa já foi usada em algum lance).
 function jaMexeu(linha, coluna) {
     return casas_mexidas.has(linha * 8 + coluna)
 }
 
-// [NOVO] ROQUE — casa vazia = null OU marcada com "◯". Precisa aceitar "◯" porque a própria rei()
+// casa vazia = null OU marcada com "◯". Precisa aceitar "◯" porque a própria rei()
 // já marcou com "◯" as casas ao lado do rei ANTES de chegar na parte do roque (era isso que impedia o roque).
 function casaVazia(linha, coluna) {
     return posições_peca[linha][coluna] === null || posições_peca[linha][coluna] === "◯"
 }
 
-// [NOVO] ROQUE — simula o rei andando de coluna_origem até coluna_destino (mesma linha) e diz se ele
+// simula o rei andando de coluna_origem até coluna_destino (mesma linha) e diz se ele
 // ficaria em xeque lá. Serve para a regra "o rei não pode passar por casa atacada". Desfaz tudo no final.
 function reiFicariaEmXeque(cor, linha, coluna_origem, coluna_destino) {
     const rei_peca = posições_peca[linha][coluna_origem]
