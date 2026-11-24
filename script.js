@@ -1,6 +1,5 @@
-    // [NOVO] ROQUE — guarda as casas (linha * 8 + coluna) de onde uma peça saiu ou onde chegou um lance.
+    // guarda as casas (linha * 8 + coluna) de onde uma peça saiu ou onde chegou um lance.
 // Se a casa do rei ou da torre estiver aqui, ela já se mexeu (ou foi capturada) e o roque com ela não vale mais.
-// (roque_disponivel e roqui_position não são lidas em lugar nenhum; pode deixar, não atrapalham)
 const casas_mexidas = new Set()
     const xadrez = document.querySelector("#tabuleiro")
     let roque_disponivel = false
@@ -68,7 +67,6 @@ const casas_mexidas = new Set()
             casa.textContent = posições_peca[linha][coluna]
             xadrez.appendChild(casa);
             casa.onclick = function() {
-                // Depois de xeque-mate ou afogamento o jogo acabou nenhum clique
                 if (fim_de_jogo) {
                     return
                 }
@@ -204,7 +202,7 @@ const casas_mexidas = new Set()
                             }
                 }
             posicao_antiga = [linha, coluna]
-            // [NOVO/EXPLICAÇÃO] Aqui o seu filtrarMovimentos() remove os lances ilegais (que deixam o próprio rei em xeque).
+            // tira us lanci ilegal
             filtrarMovimentos()
             tabuleiro()
             console.log(jogada)
@@ -215,10 +213,7 @@ const casas_mexidas = new Set()
     }
 
     function movimentos(linha, coluna) {
-        // [NOVO] EN PASSANT — captura: se o peão que está sendo movido vai para a casa "pulada" (en_passant_alvo)
-        // andando na diagonal, o peão capturado NÃO está na casa de destino: ele está na linha de ORIGEM do peão que
-        // captura, na coluna de destino. Então eu removo esse peão aqui, antes de colocar a peça na casa nova.
-    // [NOVO] ROQUE — registra a casa de origem e a de destino deste lance como "mexidas".
+    // ROQUE — registra a casa de origem e a de destino deste lance como "mexidas".
     // Assim, se o rei/torre sair do lugar, ou uma torre for capturada no canto, o roque com ela deixa de valer.
     // Isto fica aqui (e não no rei()/bolinha()) porque bolinha() também roda nas simulações do temLanceLegal().
     casas_mexidas.add(posicao_antiga[0] * 8 + posicao_antiga[1])
@@ -282,10 +277,6 @@ const casas_mexidas = new Set()
             xadrez.children[(linha+ 1) * 8 + coluna+ 1].classList.add("capturavel")
         }
         }
-        // [CORREÇÃO] Os 3 ifs abaixo (casa à DIREITA do rei) estavam dentro do "if (linha + 1 <= 7)", ou seja, só
-        // funcionavam se o rei NÃO estivesse na última linha. Resultado: o rei preto (que começa na linha 7) nunca
-        // andava nem capturava para a direita enquanto estivesse na linha 7, o que também faria o programa declarar
-        // xeque-mate falso. Eu só fechei o if de cima antes destes 3 ifs (o conteúdo deles não mudou).
         if (coluna +1 <= 7 && posições_peca[linha][coluna+1] ===  null) {
             posições_peca[linha][coluna+1] = "◯"
         }
@@ -347,10 +338,6 @@ const casas_mexidas = new Set()
             xadrez.children[(linha- 1) * 8 + coluna- 1].classList.add("capturavel") 
         }
     }
-    // [NOVO] ROQUE — bloco único para as duas cores (antes eram 4 ifs repetidos).
-    // Regras: rei e torre nunca se mexeram; casas entre eles vazias; o rei NÃO está em xeque;
-    // o rei não passa por casa atacada (f1/d1 ou f8/d8). A casa de destino (g/c) já é checada
-    // pelo filtrarMovimentos(), então aqui só checo o rei atual e a casa do meio.
     const cor = corDaVez()
     const linhaRoque = cor === "branco" ? 0 : 7
     const reiPeca = cor === "branco" ? "♔" : "♚"
@@ -904,7 +891,7 @@ function filtrarMovimentos() {
 
             const destinoAntigo = posições_peca[linha][coluna]
 
-            // [NOVO] EN PASSANT dentro da simulação: um peão que anda na diagonal para uma casa VAZIA marcada com "◯"
+            // EN PASSANT dentro da simulação: um peão que anda na diagonal para uma casa VAZIA marcada com "◯"
             // só pode estar fazendo en passant. Nesse lance o peão capturado também some do tabuleiro (ele fica ao lado
             // do peão que captura, na linha de origem), e isso pode mudar se o rei fica em xeque (ex.: o peão capturado
             // era a única peça entre o seu rei e uma torre inimiga na mesma linha). Por isso eu removo esse peão na simulação.
